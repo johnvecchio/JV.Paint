@@ -1,6 +1,8 @@
 const canvas = document.querySelector('.drawspace');
 const sliderSize = document.querySelector('.slider-size');
 const sliderLite = document.querySelector('.slider-lite');
+const sliderColor = document.querySelector('.slider-color');
+const navBar = document.querySelector('.nav-bar');
 const ctx = canvas.getContext('2d');
 
 canvas.width = window.innerWidth ;
@@ -13,14 +15,14 @@ ctx.lineWidth = sliderSize.value;
 let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
-let hue = 0;
+let hue = sliderColor.value;
 let direction = true;
-let lightness = 50;
+let lightness = sliderLite.value;
+let rainbowOn = false;
 
 
 function draw(e) {
 	if (!isDrawing) return; // stop the fn from running when they are not moused down
-	console.log(e);
 	ctx.strokeStyle = `hsl(${hue}, 100%, ${lightness}%)`;
 	ctx.beginPath();
 	// start from
@@ -29,6 +31,13 @@ function draw(e) {
 	ctx.lineTo(e.offsetX, e.offsetY);
 	ctx.stroke();
 	[lastX, lastY] = [e.offsetX, e.offsetY];
+	
+	// rainbow();
+
+	changeNavColor();
+}
+
+function rainbow() {
 	hue++;
 	
 	if (hue >= 360) {
@@ -36,7 +45,17 @@ function draw(e) {
 	}
 }
 
+function clearCanvas() {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function changeNavColor() {
+	console.log("called");
+	navBar.style.backgroundColor = `hsl(${hue}, 100%, ${lightness}%)`;
+}
+
 canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('click', draw);
 canvas.addEventListener('mouseup', () => isDrawing = false);
 canvas.addEventListener('mouseout', () => isDrawing = false);
 canvas.addEventListener('mousedown', (e) => {
@@ -44,5 +63,18 @@ canvas.addEventListener('mousedown', (e) => {
 	[lastX, lastY] = [e.offsetX, e.offsetY];
 });
 
-sliderSize.addEventListener('change', () => ctx.lineWidth = sliderSize.value);
-sliderLite.addEventListener('change', () => lightness = sliderLite.value);
+sliderSize.addEventListener('change', () => {
+	ctx.lineWidth = sliderSize.value; 
+	changeNavColor();
+});
+sliderLite.addEventListener('change', () => {
+	lightness = sliderLite.value;
+	changeNavColor();
+});
+sliderColor.addEventListener('change', () => {
+	hue = sliderColor.value;
+	changeNavColor();
+});
+
+setInterval(changeNavColor, 500);
+
