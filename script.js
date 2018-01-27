@@ -3,6 +3,7 @@ const sliderSize = document.querySelector('.slider-size');
 const sliderLite = document.querySelector('.slider-lite');
 const sliderColor = document.querySelector('.slider-color');
 const navBar = document.querySelector('.nav-bar');
+const rainbtn = document.querySelector('.btn-rain');
 const ctx = canvas.getContext('2d');
 
 canvas.width = window.innerWidth ;
@@ -32,9 +33,12 @@ function draw(e) {
 	ctx.stroke();
 	[lastX, lastY] = [e.offsetX, e.offsetY];
 	
-	// rainbow();
+	if (rainbowOn) {
+		rainbow();	
+	}
+	
 
-	changeNavColor();
+	// changeNavColor();
 }
 
 function rainbow() {
@@ -49,8 +53,18 @@ function clearCanvas() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+function turnRainbow() {
+	if (rainbowOn) {
+		rainbowOn = false;
+		rainbtn.innerText = "Rainbow OFF";
+	} else {
+		rainbowOn = true;
+		rainbtn.innerText = "Rainbow ON";
+	}
+
+}
+
 function changeNavColor() {
-	console.log("called");
 	navBar.style.backgroundColor = `hsl(${hue}, 100%, ${lightness}%)`;
 }
 
