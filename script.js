@@ -90,5 +90,5 @@ sliderColor.addEventListener('change', () => {
 	changeNavColor();
 });
 
-setInterval(changeNavColor, 500);
+setInterval(changeNavColor, 100);
 
